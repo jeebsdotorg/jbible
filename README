@@ -1,0 +1,53 @@
+jbible:
+=======
+An application to calculate the chapters you should be reading on day /x/
+with Professor Grant Horner's Bible Reading System.
+
+To see the list of chapters for day one:
+$ jbible day 1
+
+To see the list of chapters for day nine-hundred and forty-two:
+$ jbible day 942
+
+etc...
+
+Building:
+=========
+Current Prerequisites:
+- none
+
+Future Prerequisites:
+- libsword (1.8.1)
+- esv2011 module for libsword, extracted in the source tree, such that:
+    .sword/
+    ├── mods.d
+    │   └── esv2011.conf
+    └── modules
+        └── texts
+            └── ztext
+                └── esv2011
+                    ├── nt.bzs
+                    ├── nt.bzv
+                    ├── nt.bzz
+                    ├── ot.bzs
+                    ├── ot.bzv
+                    └── ot.bzz
+
+To create the executable:
+$ make
+
+To delete the executable and intermediate object files from previous builds:
+$ make clean
+
+Wishlist:
+=========
+- Learn better C.
+- Track reading progress with save, load, increment, etc...
+- SWORD module support.
+- Print the text of the daily chapters in a nice readable format.
+- Additional Bible reading plans.
+
+External Links:
+===============
+- http://grant-horner-bible-reading-plan-pdf.weebly.com/
+- https://wiki.crosswire.org/Main_Page
