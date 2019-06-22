@@ -5,47 +5,24 @@
 #include "granthorner.h"
 
 void print_usage(void) {
-	printf("Usage:");
-
-	printf("\n\t$ jbible day 1\n");
-	printf("\t\tList 1   Matthew             Chapter 1\n");
-	printf("\t\tList 2   Genesis             Chapter 1\n");
-	printf("\t\tList 3   Romans              Chapter 1\n");
-	printf("\t\tList 4   I Thessalonians     Chapter 1\n");
-	printf("\t\tList 5   Job                 Chapter 1\n");
-	printf("\t\tList 6   Psalms              Chapter 1\n");
-	printf("\t\tList 7   Proverbs            Chapter 1\n");
-	printf("\t\tList 8   Joshua              Chapter 1\n");
-	printf("\t\tList 9   Isaiah              Chapter 1\n");
-	printf("\t\tList 10  Acts                Chapter 1\n");
-
-	printf("\n\t$ jbible day 777\n");
-	printf("\t\tList 1   Luke                Chapter 21\n");
-	printf("\t\tList 2   Genesis             Chapter 29\n");
-	printf("\t\tList 3   Hebrews             Chapter 10\n");
-	printf("\t\tList 4   Revelation of John  Chapter 19\n");
-	printf("\t\tList 5   Job                 Chapter 33\n");
-	printf("\t\tList 6   Psalms              Chapter 27\n");
-	printf("\t\tList 7   Proverbs            Chapter 2\n");
-	printf("\t\tList 8   Judges              Chapter 6\n");
-	printf("\t\tList 9   Isaiah              Chapter 27\n");
-	printf("\t\tList 10  Acts                Chapter 21\n");
+	printf("Usage:\n");
+	printf("\t$ jbible day 1\n");
+	printf("\t$ jbible day 777\n");
 }
 
-void print_reading_plan(struct grant_horner_s *gh, unsigned day) {
-	unsigned i;
+void print_reading_plan(struct grant_horner_s *gh, gh_big_uint day) {
 	struct book_list_position_s blp;
+	gh_small_uint i;
 
 	for (i = 0; i < GRANT_HORNER_LIST_COUNT; ++i) {
-		printf("List %-4d", (i+1));
 		blp = grant_horner_book_list_position_by_day(&gh->lists[i], day);
-		printf("%-20sChapter %d\n", blp.book->name, blp.chapter);
+		printf("List %-4d%-20sChapter %d\n", (i+1), blp.book->name, blp.chapter);
 	}
 }
 
 int main(int argc, char *argv[]) {
 	struct grant_horner_s *gh = NULL;
-	unsigned day = 0;
+	gh_big_uint day = 0;
 
 	gh = grant_horner_alloc();
 	if (!gh) {
@@ -57,7 +34,7 @@ int main(int argc, char *argv[]) {
 		goto cleanup;
 	}
 
-	if (!*(++argv) || (day = atoi(*argv)) <= 0) {
+	if (!*(++argv) || (day = ((gh_big_uint) atoll(*argv))) <= 0) {
 		print_usage();
 		goto cleanup;
 	}

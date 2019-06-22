@@ -4,7 +4,7 @@
 #include "granthorner.h"
 
 /* Internal Functions */
-static struct book_s *books_alloc(unsigned i) {
+static struct book_s *books_alloc(gh_small_uint i) {
 	struct book_s *books = NULL;
 
 	switch(i) {
@@ -50,13 +50,13 @@ static void books_free(struct book_list_s *bl) {
 	}
 }
 
-static void books_set_properties(struct book_s *b, char *name, char *abbr, unsigned chapters) {
+static void books_set_properties(struct book_s *b, char *name, char *abbr, gh_small_uint chapters) {
 	strncpy(b->name, name, BOOK_MAX_NAME_LEN-1);
 	strncpy(b->abbr, abbr, BOOK_MAX_ABBR_LEN-1);
 	b->chapters = chapters;
 }
 
-static void books_populate(struct book_list_s *bl, unsigned i) {
+static void books_populate(struct book_list_s *bl, gh_small_uint i) {
 	struct book_s *b = bl->books;
 
 	switch(i) {
@@ -151,9 +151,9 @@ static void books_populate(struct book_list_s *bl, unsigned i) {
 	bl->count = b - bl->books;
 }
 
-static unsigned grant_horner_chapters_in_book_list(struct book_list_s *bl) {
-	unsigned chapters = 0;
-	unsigned i;
+static gh_small_uint grant_horner_chapters_in_book_list(struct book_list_s *bl) {
+	gh_small_uint chapters = 0;
+	gh_small_uint i;
 
 	for (i = 0; i < bl->count; ++i) {
 		chapters += bl->books[i].chapters;
@@ -165,7 +165,7 @@ static unsigned grant_horner_chapters_in_book_list(struct book_list_s *bl) {
 /* API Functions */
 struct grant_horner_s *grant_horner_alloc(void) {
 	struct grant_horner_s *gh = NULL;
-	unsigned i;
+	gh_small_uint i;
 
 	gh = calloc(sizeof(struct grant_horner_s), 1);
 	if (!gh) {
@@ -185,7 +185,7 @@ struct grant_horner_s *grant_horner_alloc(void) {
 }
 
 void grant_horner_free(struct grant_horner_s *gh) {
-	unsigned i;
+	gh_small_uint i;
 
 	if (gh) {
 		for (i = 0; i < GRANT_HORNER_LIST_COUNT; ++i) {
@@ -196,23 +196,16 @@ void grant_horner_free(struct grant_horner_s *gh) {
 	}
 }
 
-struct book_list_position_s grant_horner_book_list_position_by_day(struct book_list_s *bl, unsigned day) {
+struct book_list_position_s grant_horner_book_list_position_by_day(struct book_list_s *bl, gh_big_uint day) {
 	struct book_list_position_s blp;
 	struct book_s *current_book;
-	unsigned current_chapter;
-	unsigned chapters;
-	unsigned i;
+	gh_small_uint current_chapter;
+	gh_small_uint chapters;
 
 	chapters = grant_horner_chapters_in_book_list(bl);
 	current_chapter = ((day - 1) % chapters) + 1;
 
-	for (i = 0; i < bl->count; ++i) {
-		current_book = &bl->books[i];
-
-		if (current_chapter <= current_book->chapters) {
-			break;
-		}
-
+	for (current_book = bl->books; current_chapter > current_book->chapters; ++current_book) {
 		current_chapter -= current_book->chapters;
 	}
 
