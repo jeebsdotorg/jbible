@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 		goto cleanup;
 	}
 
-	if (!*(++argv) || (day = ((gh_big_uint) atoll(*argv))) <= 0) {
+	if (!*(++argv) || (day = atoll(*argv)) <= 0) {
 		print_usage();
 		goto cleanup;
 	}
