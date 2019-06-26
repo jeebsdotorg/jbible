@@ -10,9 +10,9 @@ void print_usage(void) {
 	printf("\t$ jbible day 777\n");
 }
 
-void print_reading_plan(struct grant_horner_s *gh, gh_big_uint day) {
-	struct book_list_position_s blp;
-	gh_small_uint i;
+void print_reading_plan(struct grant_horner *gh, u64 day) {
+	struct book_list_pos blp;
+	u8 i;
 
 	for (i = 0; i < GRANT_HORNER_LIST_COUNT; ++i) {
 		blp = grant_horner_book_list_position_by_day(&gh->lists[i], day);
@@ -21,8 +21,8 @@ void print_reading_plan(struct grant_horner_s *gh, gh_big_uint day) {
 }
 
 int main(int argc, char *argv[]) {
-	struct grant_horner_s *gh = NULL;
-	gh_big_uint day = 0;
+	struct grant_horner *gh = NULL;
+	u64 day = 0;
 
 	gh = grant_horner_alloc();
 	if (!gh) {

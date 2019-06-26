@@ -4,60 +4,60 @@
 #include "granthorner.h"
 
 /* Internal Functions */
-static struct book_s *books_alloc(gh_small_uint i) {
-	struct book_s *books = NULL;
+static struct book *books_alloc(u8 i) {
+	struct book *books = NULL;
 
 	switch(i) {
 	case 0:
-		books = calloc(sizeof(struct book_s), 4);
+		books = calloc(sizeof(struct book), 4);
 		break;
 	case 1:
-		books = calloc(sizeof(struct book_s), 5);
+		books = calloc(sizeof(struct book), 5);
 		break;
 	case 2:
-		books = calloc(sizeof(struct book_s), 8);
+		books = calloc(sizeof(struct book), 8);
 		break;
 	case 3:
-		books = calloc(sizeof(struct book_s), 14);
+		books = calloc(sizeof(struct book), 14);
 		break;
 	case 4:
-		books = calloc(sizeof(struct book_s), 3);
+		books = calloc(sizeof(struct book), 3);
 		break;
 	case 5:
-		books = calloc(sizeof(struct book_s), 1);
+		books = calloc(sizeof(struct book), 1);
 		break;
 	case 6:
-		books = calloc(sizeof(struct book_s), 1);
+		books = calloc(sizeof(struct book), 1);
 		break;
 	case 7:
-		books = calloc(sizeof(struct book_s), 12);
+		books = calloc(sizeof(struct book), 12);
 		break;
 	case 8:
-		books = calloc(sizeof(struct book_s), 17);
+		books = calloc(sizeof(struct book), 17);
 		break;
 	case 9:
-		books = calloc(sizeof(struct book_s), 1);
+		books = calloc(sizeof(struct book), 1);
 		break;
 	}
 
 	return books;
 }
 
-static void books_free(struct book_list_s *bl) {
+static void books_free(struct book_list *bl) {
 	if (bl && bl->books) {
 		free(bl->books);
 		bl->books = NULL;
 	}
 }
 
-static void books_set_properties(struct book_s *b, char *name, char *abbr, gh_small_uint chapters) {
+static void books_set_properties(struct book *b, char *name, char *abbr, u8 chapters) {
 	strncpy(b->name, name, BOOK_MAX_NAME_LEN-1);
 	strncpy(b->abbr, abbr, BOOK_MAX_ABBR_LEN-1);
 	b->chapters = chapters;
 }
 
-static void books_populate(struct book_list_s *bl, gh_small_uint i) {
-	struct book_s *b = bl->books;
+static void books_populate(struct book_list *bl, u8 i) {
+	struct book *b = bl->books;
 
 	switch(i) {
 	case 0:
@@ -151,9 +151,9 @@ static void books_populate(struct book_list_s *bl, gh_small_uint i) {
 	bl->count = b - bl->books;
 }
 
-static gh_small_uint grant_horner_chapters_in_book_list(struct book_list_s *bl) {
-	gh_small_uint chapters = 0;
-	gh_small_uint i;
+static u8 grant_horner_chapters_in_book_list(struct book_list *bl) {
+	u8 chapters = 0;
+	u8 i;
 
 	for (i = 0; i < bl->count; ++i) {
 		chapters += bl->books[i].chapters;
@@ -163,11 +163,11 @@ static gh_small_uint grant_horner_chapters_in_book_list(struct book_list_s *bl) 
 }
 
 /* API Functions */
-struct grant_horner_s *grant_horner_alloc(void) {
-	struct grant_horner_s *gh = NULL;
-	gh_small_uint i;
+struct grant_horner *grant_horner_alloc(void) {
+	struct grant_horner *gh = NULL;
+	u8 i;
 
-	gh = calloc(sizeof(struct grant_horner_s), 1);
+	gh = calloc(sizeof(struct grant_horner), 1);
 	if (!gh) {
 		return NULL;
 	}
@@ -184,8 +184,8 @@ struct grant_horner_s *grant_horner_alloc(void) {
 	return gh;
 }
 
-void grant_horner_free(struct grant_horner_s *gh) {
-	gh_small_uint i;
+void grant_horner_free(struct grant_horner *gh) {
+	u8 i;
 
 	if (gh) {
 		for (i = 0; i < GRANT_HORNER_LIST_COUNT; ++i) {
@@ -196,11 +196,11 @@ void grant_horner_free(struct grant_horner_s *gh) {
 	}
 }
 
-struct book_list_position_s grant_horner_book_list_position_by_day(struct book_list_s *bl, gh_big_uint day) {
-	struct book_list_position_s blp;
-	struct book_s *current_book;
-	gh_small_uint current_chapter;
-	gh_small_uint chapters;
+struct book_list_pos grant_horner_book_list_position_by_day(struct book_list *bl, u64 day) {
+	struct book_list_pos blp;
+	struct book *current_book;
+	u8 current_chapter;
+	u8 chapters;
 
 	chapters = grant_horner_chapters_in_book_list(bl);
 	current_chapter = ((day - 1) % chapters) + 1;
