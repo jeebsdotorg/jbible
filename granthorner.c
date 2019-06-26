@@ -6,37 +6,38 @@
 /* Internal Functions */
 static struct book *books_alloc(u8 i) {
 	struct book *books = NULL;
+	size_t size_of_book = sizeof(*books);
 
 	switch(i) {
 	case 0:
-		books = calloc(sizeof(struct book), 4);
+		books = calloc(size_of_book, 4);
 		break;
 	case 1:
-		books = calloc(sizeof(struct book), 5);
+		books = calloc(size_of_book, 5);
 		break;
 	case 2:
-		books = calloc(sizeof(struct book), 8);
+		books = calloc(size_of_book, 8);
 		break;
 	case 3:
-		books = calloc(sizeof(struct book), 14);
+		books = calloc(size_of_book, 14);
 		break;
 	case 4:
-		books = calloc(sizeof(struct book), 3);
+		books = calloc(size_of_book, 3);
 		break;
 	case 5:
-		books = calloc(sizeof(struct book), 1);
+		books = calloc(size_of_book, 1);
 		break;
 	case 6:
-		books = calloc(sizeof(struct book), 1);
+		books = calloc(size_of_book, 1);
 		break;
 	case 7:
-		books = calloc(sizeof(struct book), 12);
+		books = calloc(size_of_book, 12);
 		break;
 	case 8:
-		books = calloc(sizeof(struct book), 17);
+		books = calloc(size_of_book, 17);
 		break;
 	case 9:
-		books = calloc(sizeof(struct book), 1);
+		books = calloc(size_of_book, 1);
 		break;
 	}
 
